@@ -166,6 +166,9 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+-- add tabs to session
+vim.opt.sessionoptions = 'curdir,folds,globals,help,tabpages,terminal,winsize'
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -700,6 +703,7 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
+        sqls = {},
         -- ts_ls = {},
         --
 
@@ -775,7 +779,7 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true, cs = true }
+        local disable_filetypes = { c = true, cpp = true, cs = true, sql = true }
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
         else

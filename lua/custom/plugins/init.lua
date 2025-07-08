@@ -56,4 +56,16 @@ return {
       { '<leader>gg', '<cmd>LazyGit<cr>', desc = 'LazyGit' },
     },
   },
+  {
+    'nanozuki/tabby.nvim',
+    ---@type TabbyConfig
+    opts = {
+      -- configs...
+    },
+  },
+  {
+    'nanotee/sqls.nvim',
+    event = 'FileType',
+    ft = 'sql', -- Load only for SQL file types
+  },
 }
