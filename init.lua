@@ -169,6 +169,9 @@ vim.o.confirm = true
 -- add tabs to session
 vim.opt.sessionoptions = 'curdir,folds,globals,help,tabpages,terminal,winsize'
 
+-- grep with rg
+vim.o.grepprg = 'rg --vimgrep --smart-case --follow'
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -556,6 +559,9 @@ require('lazy').setup({
             mode = mode or 'n'
             vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
+
+          -- See type under cursor
+          map('grh', vim.lsp.buf.hover, '[H]over')
 
           -- Rename the variable under your cursor.
           --  Most Language Servers support renaming across files, etc.
