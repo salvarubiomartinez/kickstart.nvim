@@ -1051,3 +1051,19 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+--
+--
+--
+-- function for find files with fd
+function _G.complete_fd(arglead, cmdline, cursorpos)
+  local cmd = "fd -t f -g '" .. arglead .. "'"
+  local results = vim.fn.systemlist(cmd)
+  return results
+end
+
+vim.api.nvim_exec(
+  [[
+    command! -nargs=1 -complete=customlist,v:lua.complete_fd FD execute 'edit' <f-args>
+]],
+  false
+)
