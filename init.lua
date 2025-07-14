@@ -166,6 +166,9 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+-- reload changed files
+vim.o.autoread = true
+
 -- add tabs to session
 vim.opt.sessionoptions = 'curdir,folds,globals,help,tabpages,terminal,winsize'
 
