@@ -926,8 +926,11 @@ require('lazy').setup({
     config = function()
       ---@diagnostic disable-next-line: missing-fields
       require('tokyonight').setup {
+        transparent = true,
         styles = {
           comments = { italic = false }, -- Disable italics in comments
+          sidebars = 'transparent',
+          floats = 'transparent',
         },
       }
 
@@ -1059,7 +1062,7 @@ require('lazy').setup({
 --
 -- function for find files with fd
 function _G.complete_fd(arglead, cmdline, cursorpos)
-  local cmd = "fd -t f -g '" .. arglead .. "'"
+  local cmd = "fd -t f -i '" .. arglead .. "'"
   local results = vim.fn.systemlist(cmd)
   return results
 end
