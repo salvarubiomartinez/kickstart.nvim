@@ -68,4 +68,7 @@ return {
     event = 'FileType',
     ft = 'sql', -- Load only for SQL file types
   },
+  {
+    'benoror/gpg.nvim',
+  },
 }
