@@ -262,6 +262,8 @@ end
 local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
 
+-- formatting with lua gq
+vim.opt.formatprg = 'prettier --stdin-filepath %'
 -- [[ Configure and install plugins ]]
 --
 --  To check the current status of your plugins, run
