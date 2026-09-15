@@ -23,6 +23,11 @@ return {
   },
   {
     'rest-nvim/rest.nvim',
+    -- luarocks/hererocks build (disabled globally in init.lua) would normally
+    -- install nvim-nio, mimetypes, xml2lua and fidget.nvim for us. Since it's
+    -- disabled, we provide nvim-nio/fidget.nvim as regular plugins below, and
+    -- shim xml2lua/mimetypes (plain-Lua rocks with no `lua/` subdir) onto
+    -- package.path via their `init` hooks.
     config = function()
       require('rest-nvim').setup {
         request = {
@@ -35,6 +40,20 @@ return {
     end,
     dependencies = {
       'nvim-treesitter/nvim-treesitter',
+      'nvim-neotest/nvim-nio',
+      'j-hui/fidget.nvim',
+      {
+        'manoelcampos/xml2lua',
+        init = function(plugin)
+          package.path = plugin.dir .. '/?.lua;' .. package.path
+        end,
+      },
+      {
+        'lunarmodules/lua-mimetypes',
+        init = function(plugin)
+          package.path = plugin.dir .. '/?.lua;' .. package.path
+        end,
+      },
       opts = function(_, opts)
         opts.ensure_installed = opts.ensure_installed or {}
         table.insert(opts.ensure_installed, 'http')

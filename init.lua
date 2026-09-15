@@ -118,22 +118,21 @@ vim.schedule(function()
   vim.o.clipboard = 'unnamedplus'
 end)
 
-
-local function osc52(yanked)
-  local encoded = vim.fn.system('base64 -w0', yanked)
-  io.stdout:write('\027]52;c;' .. encoded .. '\027\\')
-end
-
-vim.g.clipboard = {
-  copy = {
-    ['+'] = osc52,
-    ['*'] = osc52,
-  },
-  paste = {
-    ['+'] = function() return {} end,
-    ['*'] = function() return {} end,
-  },
-}
+-- local function osc52(yanked)
+--   local encoded = vim.fn.system('base64 -w0', yanked)
+--   io.stdout:write('\027]52;c;' .. encoded .. '\027\\')
+-- end
+--
+-- vim.g.clipboard = {
+--   copy = {
+--     ['+'] = osc52,
+--     ['*'] = osc52,
+--   },
+--   paste = {
+--     ['+'] = function() return {} end,
+--     ['*'] = function() return {} end,
+--   },
+-- }
 
 -- Enable break indent
 vim.o.breakindent = true
@@ -731,7 +730,9 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
-        sqls = {},
+        -- sqls is configured below via vim.lsp.config()/vim.lsp.enable(), since
+        -- mason-lspconfig's automatic_enable feature (on by default) starts servers
+        -- through that new API directly, bypassing the `handlers` table below.
         -- ts_ls = {},
         --
 
@@ -773,6 +774,9 @@ require('lazy').setup({
       require('mason-lspconfig').setup {
         ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
         automatic_installation = false,
+        -- sqls is wired manually below (patched local binary), so keep
+        -- mason-lspconfig's automatic_enable from touching it.
+        automatic_enable = { exclude = { 'sqls' } },
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
@@ -784,6 +788,16 @@ require('lazy').setup({
           end,
         },
       }
+
+      -- sqls: use a locally patched binary (fixes MSSQL "@p1" placeholder bug in
+      -- sqls-server/sqls v0.2.48 -- see salvarubiomartinez/sqls#fix/mssql-p1-placeholder)
+      -- instead of the Mason-managed one. Wired via the new vim.lsp.config()/
+      -- vim.lsp.enable() API, as recommended by sqls.nvim's README.
+      vim.lsp.config('sqls', {
+        cmd = { vim.fn.expand '~/.local/share/nvim-custom-bin/sqls' },
+        capabilities = capabilities,
+      })
+      vim.lsp.enable 'sqls'
     end,
   },
 
@@ -1096,6 +1110,10 @@ require('lazy').setup({
   -- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
   -- you can continue same window with `<space>sr` which resumes last telescope search
 }, {
+  -- luarocks/hererocks build pipeline is unreliable in this environment
+  -- (see custom/plugins/init.lua rest.nvim entry for details); disable it
+  -- globally and wire any plain-Lua rock deps by hand where needed.
+  rocks = { enabled = false },
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
     -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
