@@ -54,10 +54,8 @@ return {
           package.path = plugin.dir .. '/?.lua;' .. package.path
         end,
       },
-      opts = function(_, opts)
-        opts.ensure_installed = opts.ensure_installed or {}
-        table.insert(opts.ensure_installed, 'http')
-      end,
+      -- NOTE: `http` is added to the nvim-treesitter (main branch) install list in
+      -- init.lua. The old `opts.ensure_installed` hook is a no-op on that branch.
     },
   },
   {
@@ -84,7 +82,7 @@ return {
   },
   {
     'nanotee/sqls.nvim',
-    commit = '2fef377c5bdfc08bc3359a5803e57bdd847468bd',
+    -- commit = '2fef377c5bdfc08bc3359a5803e57bdd847468bd',
     event = 'FileType',
     ft = 'sql', -- Load only for SQL file types
     cmd = {

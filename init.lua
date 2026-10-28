@@ -776,7 +776,7 @@ require('lazy').setup({
         automatic_installation = false,
         -- sqls is wired manually below (patched local binary), so keep
         -- mason-lspconfig's automatic_enable from touching it.
-        automatic_enable = { exclude = { 'sqls' } },
+        -- automatic_enable = { exclude = { 'sqls' } },
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
@@ -794,7 +794,7 @@ require('lazy').setup({
       -- instead of the Mason-managed one. Wired via the new vim.lsp.config()/
       -- vim.lsp.enable() API, as recommended by sqls.nvim's README.
       vim.lsp.config('sqls', {
-        cmd = { vim.fn.expand '~/.local/share/nvim-custom-bin/sqls' },
+        -- cmd = { vim.fn.expand '~/.local/share/nvim-custom-bin/sqls' },
         capabilities = capabilities,
       })
       vim.lsp.enable 'sqls'
@@ -1035,6 +1035,7 @@ require('lazy').setup({
         'dockerfile',
         'gitignore',
         'html',
+        'http', -- needed by rest.nvim ftplugin/http.lua
         'javascript',
         'json',
         'json5',
